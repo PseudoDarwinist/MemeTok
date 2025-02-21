@@ -41,6 +41,13 @@ enum MemeCategory: String, CaseIterable {
                 MemeSubcategory(id: "gaming_tech", name: "Gaming & Hardware", keywords: [
                     "gpu", "cpu", "gaming pc", "console", "playstation", "xbox",
                     "nvidia", "amd", "intel", "hardware", "ram", "ssd"
+                ]),
+                MemeSubcategory(id: "education", name: "Education", keywords: [
+                    "exam", "student", "study", "homework", "assignment",
+                    "college", "university", "school", "cheating", "grade",
+                    "professor", "teacher", "lecture", "class", "semester",
+                    "finals", "midterm", "quiz", "test", "project",
+                    "deadline", "submission", "lab", "tutorial", "course"
                 ])
             ]
         case .entertainment:
@@ -139,10 +146,19 @@ class TopicAnalysisService {
     private func determineCategory(from terms: [String], title: String) -> (MemeCategory, String?) {
         let lowercaseTitle = title.lowercased()
         
-        // First check for student/education related content
+        // Check for education content first
         let educationKeywords = ["exam", "student", "study", "homework", "assignment", 
-                                "college", "university", "school", "cheating", "grade"]
+                               "college", "university", "school", "cheating", "grade",
+                               "professor", "teacher", "lecture", "class"]
         if educationKeywords.contains(where: { lowercaseTitle.contains($0) }) {
+            return (.tech, "education") // Now categorize education memes under education subcategory
+        }
+        
+        // First check for student/education related content
+        let educationKeywordsFull = ["exam", "student", "study", "homework", "assignment", 
+                                    "college", "university", "school", "cheating", "grade",
+                                    "professor", "teacher", "lecture", "class"]
+        if educationKeywordsFull.contains(where: { lowercaseTitle.contains($0) }) {
             return (.tech, "programming") // Categorize education memes under programming
         }
         
